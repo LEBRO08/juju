@@ -10,7 +10,7 @@ from settings import (
     is_pool_value_above_threshold_1,
     is_enters_value_at_most_4,
     is_pool_per_enters_above_threshold,
-    extract_text_between_parentheses,
+    extract_text_between_parentheses
 )
 
 responses = [
@@ -23,6 +23,7 @@ responses = [
     "thank you",
     "Thank you",
     "lfg",
+    "Thank you",
     "tysm",
     "thankss",
 ]
@@ -41,84 +42,103 @@ class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
 
-    async def on_message(self, message):
-        try:
-            if message.author == self.user or message.guild is None:
-                return
-
-            # Process raffle ended messages
-            for embed in message.embeds:
-                if self.user.mentioned_in(message) and "### 🎟️\xa0\xa0Raffle ended!" in embed.description:
-                    response = random.choice(responses)
-                    await asyncio.sleep(random.randint(2, 4))
-                    async with message.channel.typing():
-                        await asyncio.sleep(random.randint(2, 4))
-                        await message.channel.send(response)
-
-                    # Send a message to a specific channel after processing
-                    channel_id = 1252625826109722664
-                    channel = self.get_channel(channel_id)
-                    if channel:
-                        async with message.channel.typing():
-                            await asyncio.sleep(random.randint(5, 10))
-                            await channel.send("<@740547277164249089> wa rb7t azbi")
-            
-            # Process airdrop collected messages
-            for embed in message.embeds:
-                if self.user.mentioned_in(message) and "Airdrop collected" in embed.description:
-                    extracted_text = extract_text_between_parentheses(embed.description)
-                    if extracted_text:
-                        print(f"Extracted text: {extracted_text}")
-
-                    # Send a message to a specific channel after processing
-                    channel_id = 1252731072081428500
-                    channel = self.get_channel(channel_id)
-                    if channel and extracted_text is not None:
-                        async with message.channel.typing():
-                            await asyncio.sleep(random.randint(5, 10))
-                            await channel.send(f"Text between parentheses: {extracted_text}")
-
-            # Process raffle created messages
-            for embed in message.embeds:
-                if "Raffle created" in embed.description:
-                    if is_prize_value_above_threshold(embed.fields):
-                        for component in message.components:
-                            for child in component.children:
-                                if child.label == "Enter":
-                                    await asyncio.sleep(random.randint(2, 5))
-                                    await child.click()
-                    else:
-                        print("Prize value is not more than $0.1, skipping entry.")
-                        break  # Exit the loop if prize value is not above $0.1
-            
-            # Process airdrop created messages (Pool > $1 and 4 or less enters)
-            for embed in message.embeds:
-                if "Airdrop created" in embed.description:
-                    if is_pool_value_above_threshold(embed.fields) and is_enters_value_at_most_4(embed.fields):
-                        for component in message.components:
-                            for child in component.children:
-                                if child.label == "Enter":
-                                    await child.click()
-                    else:
-                        print("Pool value is not more than $1 or enters are more than 4, skipping entry.")
-                        break  # Exit the loop if pool value is not above $1 or enters are more than 4
-
-            # Process airdrop created messages (Pool > $0.1 per enters)
-            for embed in message.embeds:
-                if "Airdrop created" in embed.description:
-                    if is_pool_per_enters_above_threshold(embed.fields):
-                        for component in message.components:
-                            for child in component.children:
-                                if child.label == "Enter":
-                                    await child.click()
-                    else:
-                        print("Pool value is not more than $0.1 per enters, skipping entry.")
-                        break  # Exit the loop if pool value is not above $0.1 per enters
-
-        except Exception as e:
-            print(f"An error occurred in on_message: {e}")
-
 client = MyClient()
+
+@client.event
+async def on_message(message):
+    if message.author.id == 1150448986264698980 and message.guild.id == 1239293213525803048:
+        print("Message from bot.")
+
+        # Processing raffle ended messages
+        for embed in message.embeds:
+            if client.user.mentioned_in(message) and "### 🎟️\xa0\xa0Raffle ended!" in embed.description:
+                response = random.choice(responses)
+                extracted_text = extract_text_between_parentheses(embed.description)
+                
+                await asyncio.sleep(random.randint(2, 4))
+                async with message.channel.typing():
+                    await asyncio.sleep(random.randint(2, 4))
+                    await message.channel.send(response)
+
+                # Send a message to a specific channel after processing
+                channel_id = 1252625826109722664
+                channel = client.get_channel(channel_id)
+                
+                if extracted_text:
+                    print(f"Extracted text: {extracted_text}")
+    
+                if channel and extracted_text is not None:  # Ensure extracted_text is not None
+                    async with message.channel.typing():
+                        await asyncio.sleep(random.randint(5, 10))
+                        await channel.send(f"<@740547277164249089> sat rb7t {extracted_text}")
+
+            elif client.user.mentioned_in(message) and "Airdrop collected" in embed.description:
+                extracted_text = extract_text_between_parentheses(embed.description)
+                
+                if extracted_text:
+                    print(f"Extracted text: {extracted_text}")
+    
+                # Send a message to a specific channel after processing
+                channel_id = 1252731072081428500
+                channel = client.get_channel(channel_id)
+                
+                if channel and extracted_text is not None:  # Ensure extracted_text is not None
+                    async with channel.typing():
+                        await asyncio.sleep(random.randint(5, 10))
+                        await channel.send(f"<@740547277164249089> rani jbt lik {extracted_text} atbi")
+
+        # Processing raffle created messages
+        for embed in message.embeds:
+            if "Raffle created" in embed.description:
+                if is_prize_value_above_threshold(embed.fields):
+                    for component in message.components:
+                        for child in component.children:
+                            if child.label == "Enter":
+                                await asyncio.sleep(random.randint(2, 4))
+                                await child.click()  # Simulate clicking the "Enter" button
+                else:
+                    print("Prize value is not more than $0.1, skipping entry.")
+                    break  # Exit the loop if prize value is not above $0.1
+
+        # Processing airdrop created messages
+        for embed in message.embeds:
+            if "Airdrop created" in embed.description:
+                if is_pool_value_above_threshold(embed.fields):
+                    for component in message.components:
+                        for child in component.children:
+                            if child.label == "Enter":
+                                await asyncio.sleep(random.randint(3, 6))
+                                await child.click()  # CLICKS THE ENTER BUTTON
+                                await asyncio.sleep(random.randint(2, 4))
+                                async with message.channel.typing():
+                                    await asyncio.sleep(random.randint(2, 4))
+                                    await message.channel.send(response)
+                    # Exit the loop after processing
+                    break
+
+                elif is_pool_value_above_threshold_1(embed.fields) and is_enters_value_at_most_4(embed.fields):
+                    for component in message.components:
+                        for child in component.children:
+                            if child.label == "Enter":
+                                await child.click()  # CLICKS THE ENTER BUTTON
+                                await asyncio.sleep(random.randint(2, 4))
+                                async with message.channel.typing():
+                                    await asyncio.sleep(random.randint(2, 4))
+                                    await message.channel.send(response)
+                    # Exit the loop after processing
+                    break
+
+                elif is_pool_per_enters_above_threshold(embed.fields):
+                    for component in message.components:
+                        for child in component.children:
+                            if child.label == "Enter":
+                                await child.click()  # CLICKS THE ENTER BUTTON
+                    # Exit the loop after processing
+                    break
+
+                else:
+                    print("Conditions not met for any action, skipping")
+                    break  # Exit the loop if no conditions are met
 
 if __name__ == "__main__":
     client.run(os.environ['TOKEN'])
