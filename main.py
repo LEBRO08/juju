@@ -70,7 +70,7 @@ async def on_message(message):
         for embed in message.embeds:
             if client.user.mentioned_in(message) and "### 🎟️\xa0\xa0Raffle ended!" in embed.description:
                 response = random.choice(responses)
-                await asyncio.sleep(random.randint(2, 4))
+                await asyncio.sleep(random.randint(3, 15))
                 async with message.channel.typing():
                     await asyncio.sleep(random.randint(2, 4))
                     await message.channel.send(response)
