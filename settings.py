@@ -43,7 +43,7 @@ def is_pool_value_above_threshold_1(fields):
             print(f"Checking pool: {pool_text}")
             value = extract_prize_value(pool_text)
             if value is not None:
-                return value > 0.1  # Check if the value is more than $0.1
+                return value > 0.5  # Check if the value is more than $0.5
             else:
                 return False  # Return False if extraction failed
     return False  # Return False if no pool field found or extraction failed
@@ -67,3 +67,38 @@ def is_enters_value_at_most_4(fields):
             else:
                 return False  # Return False if extraction failed
     return False  # Return False if no enters field found or extraction failed
+
+def is_pool_per_enters_above_threshold(fields):
+    pool_value = None
+    enters_value = None
+    
+    for field in fields:
+        if field.name.lower() == "pool":
+            pool_text = field.value  # Extract pool text from the pool field
+            print(f"Checking pool: {pool_text}")
+            pool_value = extract_prize_value(pool_text)
+            if pool_value is None:
+                return False  # Return False if extraction failed
+        
+        if field.name.lower() == "enters":
+            enters_text = field.value  # Extract enters text from the enters field
+            print(f"Checking enters: {enters_text}")
+            enters_value = extract_enters_value(enters_text)
+            if enters_value is None or enters_value == 0:
+                return False  # Return False if extraction failed or enters is 0
+    
+    if pool_value is not None and enters_value is not None and enters_value != 0:
+        return pool_value / enters_value > 0.1
+    else:
+        return False  # Return False if pool or enters values were not found or valid
+
+def extract_text_between_parentheses(text):
+    try:
+        match = re.search(r'\((.*?)\)', text)
+        if match:
+            return match.group(1)  # Extract the text between parentheses
+        else:
+            return None  # Return None if no match found
+    except Exception as e:
+        print(f"Error extracting text between parentheses: {e}")
+        return None
