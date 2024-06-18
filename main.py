@@ -4,7 +4,7 @@ import random
 import os
 from flask import Flask
 from keep_alive import keep_alive
-from settings import is_prize_value_above_threshold, is_pool_value_above_threshold, is_pool_value_above_threshold_1, is_enters_value_at_most_4, is_pool_per_enters_above_threshold
+from settings import is_prize_value_above_threshold, is_pool_value_above_threshold, is_pool_value_above_threshold_1, is_enters_value_at_most_4, is_pool_per_enters_above_threshold, extract_text_between_parentheses
 
 responses = [
     "Thx",
@@ -58,6 +58,20 @@ async def on_message(message):
                     async with message.channel.typing():
                         await asyncio.sleep(random.randint(5, 10))
                         await channel.send("<@740547277164249089> wa rb7t azbi")
+        
+            for embed in message.embeds:
+                if client.user.mentioned_in(message) and "Airdrop collected" in embed.description:
+                    extracted_text = extract_text_between_parentheses(embed.description)
+                    if extracted_text:
+                        print(f"Extracted text: {extracted_text}")
+    
+                    # Send a message to a specific channel after processing
+                    channel_id = 1252731072081428500
+                    channel = client.get_channel(channel_id)
+                    if channel and extracted_text is not None:  # Ensure extracted_text is not None
+                        async with channel.typing():
+                            await asyncio.sleep(random.randint(5, 10))
+                            await channel.send(f"<@740547277164249089> rani jbt lik {extracted_text} atbi")
 
         # Processing raffle created messages
         for embed in message.embeds:
