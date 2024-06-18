@@ -4,7 +4,7 @@ import random
 import os
 from flask import Flask
 from keep_alive import keep_alive
-from settings import is_prize_value_above_threshold, is_pool_value_above_threshold, is_pool_value_above_threshold_1, is_enters_value_at_most_4
+from settings import is_prize_value_above_threshold, is_pool_value_above_threshold, is_pool_value_above_threshold_1, is_enters_value_at_most_4, is_pool_per_enters_above_threshold
 
 responses = [
     "Thx",
@@ -79,13 +79,17 @@ async def on_message(message):
                     for component in message.components:
                         for child in component.children:
                             if child.label == "Enter":
-                                await asyncio.sleep(random.randint(2, 5))
-                           #     await child.click()  # CLICKS THE ENTER BUTTON
+                                await asyncio.sleep(random.randint(3, 6))
+                                await child.click()  # CLICKS THE ENTER BUTTON
+                                await asyncio.sleep(random.randint(2, 4))
+                                async with message.channel.typing():
+                                   await asyncio.sleep(random.randint(2, 4))
+                                   await message.channel.send(response)
                 else:
                     print("Pool value is not more than $1, skipping entry.")
                     break  # Exit the loop if pool value is not above $1
 
-        # Processing airdrop created messages (+1$ and less 4 enters)
+        # Processing airdrop created messages (+0.5$ and less 4 enters)
         for embed in message.embeds:
             if "Airdrop created" in embed.description:
                 if is_pool_value_above_threshold_1(embed.fields) and is_enters_value_at_most_4(embed.fields):
@@ -94,7 +98,19 @@ async def on_message(message):
                             if child.label == "Enter":
                                 await child.click()  # CLICKS THE ENTER BUTTON
                 else:
-                    print("Pool value is not more than $1, skipping entry.")
+                    print("Not 0.5$ and 4 or less enters, skipping")
+                    break  # Exit the loop if pool value is not above $0.5
+
+        # Processing airdrop created messages (.1$ each at least)
+        for embed in message.embeds:
+            if "Airdrop created" in embed.description:
+                if is_pool_per_enters_above_threshold(embed.fields):
+                    for component in message.components:
+                        for child in component.children:
+                            if child.label == "Enter":
+                                await child.click()  # CLICKS THE ENTER BUTTON
+                else:
+                    print("Not 0.1$ + each, skipping")
                     break  # Exit the loop if pool value is not above $1
 
 if __name__ == "__main__":
