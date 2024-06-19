@@ -88,7 +88,7 @@ def is_pool_per_enters_above_threshold(fields):
                 return False  # Return False if extraction failed or enters is 0
     
     if pool_value is not None and enters_value is not None and enters_value != 0:
-        return return pool_value / enters_value >= 0.01
+        return pool_value / enters_value >= 0.01
     else:
         return False  # Return False if pool or enters values were not found or valid
 
