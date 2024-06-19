@@ -100,7 +100,8 @@ async def on_message(message):
                         await asyncio.sleep(random.randint(3, 7))
 
                   # Typing for response
-                    await asyncio.sleep(random.randint(6, 12))
+                if extracted_text >= 0.5:
+                    await asyncio.sleep(random.randint(3, 5))
                     async with message.channel.typing():  # Start typing indicator
                         response_length = len(response)
                         min_sleep = 2  # Minimum sleep duration
