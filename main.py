@@ -14,16 +14,13 @@ from settings import (
 )
 
 responses = [
-    "Thx",
-    "Thanks",
-    "Ty",
+    "thx <a:pepemoney:1236611457047859210>",
+    "<:peepoheart:1236627534523797535>",
     "thx",
-    "ty",
+    "ty <:prayge:1236611465142861834>",
     "thanks",
     "thank you",
-    "Thank you",
     "lfg",
-    "Thank you",
     "tysm",
     "thankss",
 ]
@@ -73,6 +70,7 @@ async def on_message(message):
                         await channel.send(f"<@740547277164249089> sat rb7t {extracted_text}")
 
             elif client.user.mentioned_in(message) and "Airdrop collected" in embed.description:
+                response = random.choice(responses)
                 extracted_text = extract_text_between_parentheses(embed.description)
                 
                 if extracted_text:
@@ -84,8 +82,18 @@ async def on_message(message):
                 
                 if channel and extracted_text is not None:  # Ensure extracted_text is not None
                     async with channel.typing():
-                        await asyncio.sleep(random.randint(5, 10))
+                        await asyncio.sleep(random.randint(3, 7))
                         await channel.send(f"<@740547277164249089> rani jbt lik {extracted_text} atbi")
+                        await asyncio.sleep(random.randint(3, 7))
+
+                  # Typing for response
+                    async with message.channel.typing():  # Start typing indicator
+                        response_length = len(response)
+                        min_sleep = 2  # Minimum sleep duration
+                        adjusted_sleep = max(min_sleep, response_length // 5)  # Adjusted sleep duration based on response length
+                        await asyncio.sleep(adjusted_sleep)
+                        await message.channel.send(response)
+
 
         # Processing raffle created messages
         for embed in message.embeds:
@@ -96,6 +104,7 @@ async def on_message(message):
                             if child.label == "Enter":
                                 await asyncio.sleep(random.randint(2, 4))
                                 await child.click()  # Simulate clicking the "Enter" button
+                           #     await message.channel.send(response)
                 else:
                     print("Prize value is not more than $0.1, skipping entry.")
                     break  # Exit the loop if prize value is not above $0.1
@@ -109,10 +118,10 @@ async def on_message(message):
                             if child.label == "Enter":
                                 await asyncio.sleep(random.randint(3, 6))
                                 await child.click()  # CLICKS THE ENTER BUTTON
-                                await asyncio.sleep(random.randint(2, 4))
-                                async with message.channel.typing():
-                                    await asyncio.sleep(random.randint(2, 4))
-                                    await message.channel.send(response)
+                         #       await asyncio.sleep(random.randint(2, 4))
+                         #       async with message.channel.typing():
+                        #            await asyncio.sleep(random.randint(2, 4))
+                        #            await message.channel.send(response)
                     # Exit the loop after processing
                     break
 
@@ -122,9 +131,9 @@ async def on_message(message):
                             if child.label == "Enter":
                                 await child.click()  # CLICKS THE ENTER BUTTON
                                 await asyncio.sleep(random.randint(2, 4))
-                                async with message.channel.typing():
-                                    await asyncio.sleep(random.randint(2, 4))
-                                    await message.channel.send(response)
+                      #          async with message.channel.typing():
+                     #               await asyncio.sleep(random.randint(2, 4))
+                    #                await message.channel.send(response)
                     # Exit the loop after processing
                     break
 
@@ -133,6 +142,9 @@ async def on_message(message):
                         for child in component.children:
                             if child.label == "Enter":
                                 await child.click()  # CLICKS THE ENTER BUTTON
+                        #        async with message.channel.typing():
+                       #             await asyncio.sleep(random.randint(2, 4))
+                      #              await message.channel.send(response)
                     # Exit the loop after processing
                     break
 
