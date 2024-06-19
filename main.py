@@ -13,7 +13,7 @@ from settings import (
     extract_text_between_parentheses
 )
 
-emoji_options = ['<a:pepemoney:1236611457047859210>', '<:peepoheart:1236627534523797535>', '�']
+emoji_options = ['<a:pepemoney:1236611457047859210>', '<:peepoheart:1236627534523797535>', '🔥']
 
 responses = [
     "thx <a:pepemoney:1236611457047859210>",
