@@ -20,7 +20,10 @@ responses = [
     "<:peepoheart:1236627534523797535>",
     "thx",
     "ty <:prayge:1236611465142861834>",
-    "thanks",
+    "<a:pepemoney:1236611457047859210> <a:pepemoney:1236611457047859210> <a:pepemoney:1236611457047859210>",
+    "<a:peepoPog2:781015662578499597>",
+    "<:Peepo_Happy:1246998990319259658>",
+    "thanks <:Peepo_Happy:1246998990319259658> ",
     "thank you",
     "lfg",
     "ty",
@@ -100,7 +103,6 @@ async def on_message(message):
                         await asyncio.sleep(random.randint(3, 7))
 
                   # Typing for response
-                if extracted_text >= 0.5:
                     await asyncio.sleep(random.randint(3, 5))
                     async with message.channel.typing():  # Start typing indicator
                         response_length = len(response)
