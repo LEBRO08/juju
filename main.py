@@ -23,7 +23,7 @@ responses = [
     "thanks",
     "thank you",
     "lfg",
-    "tysm",
+    "ty",
     "thankss",
 ]
 
