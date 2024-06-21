@@ -164,6 +164,7 @@ async def on_message(message):
                     for component in message.components:
                         for child in component.children:
                             if child.label == "Enter":
+                                await asyncio.sleep(random.randint(5, 20))
                                 await child.click()  # CLICKS THE ENTER BUTTON
                     #            async with message.channel.typing():
                     #                await asyncio.sleep(random.randint(2, 4))
