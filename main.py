@@ -153,10 +153,10 @@ async def on_message(message):
                         for child in component.children:
                             if child.label == "Enter":
                                 await child.click()  # CLICKS THE ENTER BUTTON
-                    #            await asyncio.sleep(random.randint(2, 4))
-                    #            async with message.channel.typing():
-                    #                await asyncio.sleep(random.randint(2, 4))
-                    #                await message.channel.send(response)
+                                await asyncio.sleep(random.randint(5, 10))
+                                async with message.channel.typing():
+                                    await asyncio.sleep(random.randint(3, 6))
+                                    await message.channel.send(response)
                     # Exit the loop after processing
                     break
 
@@ -164,7 +164,7 @@ async def on_message(message):
                     for component in message.components:
                         for child in component.children:
                             if child.label == "Enter":
-                                await asyncio.sleep(random.randint(5, 20))
+                                await asyncio.sleep(random.randint(10, 30))
                                 await child.click()  # CLICKS THE ENTER BUTTON
                     #            async with message.channel.typing():
                     #                await asyncio.sleep(random.randint(2, 4))
