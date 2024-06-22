@@ -103,13 +103,13 @@ async def on_message(message):
                         await asyncio.sleep(random.randint(3, 7))
 
                   # Typing for response
-                    await asyncio.sleep(random.randint(3, 5))
-                    async with message.channel.typing():  # Start typing indicator
-                        response_length = len(response)
-                        min_sleep = 2  # Minimum sleep duration
-                        adjusted_sleep = max(min_sleep, response_length // 5)  # Adjusted sleep duration based on response length
-                        await asyncio.sleep(adjusted_sleep)
-                        await message.channel.send(response)
+                    await asyncio.sleep(random.randint(3, 30))
+             #       async with message.channel.typing():  # Start typing indicator
+             #           response_length = len(response)
+             #           min_sleep = 2  # Minimum sleep duration
+             #           adjusted_sleep = max(min_sleep, response_length // 5)  # Adjusted sleep duration based on response length
+             #       await asyncio.sleep(adjusted_sleep)
+                      #  await message.channel.send(response)
                     try:
                         random_emoji = random.choice(emoji_options)
                         await asyncio.sleep(random.randint(5, 8))
